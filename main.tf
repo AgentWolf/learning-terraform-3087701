@@ -58,13 +58,6 @@ module "blog_sg" {
 }
 
 
-resource "aws_security_group" "blog" {
-  name        = "blog"
-  description = "Allow 80 and 443 in, everything out"
-
-  vpc_id = module.blog_vpc.vpc_id
-}
-
 module "blog_alb" {
   source = "terraform-aws-modules/alb/aws"
 
@@ -95,10 +88,11 @@ resource "aws_lb_target_group" "blog" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = module.blog_vpc.vpc_id
+  target_type = "ip"
 }
 
 resource "aws_lb_target_group_attachment" "blog" {
   target_group_arn = aws_lb_target_group.blog.arn
-  target_id        = aws_instance.blog.arn
+  target_id        = aws_instance.blog.id
   port             = 80
 }
