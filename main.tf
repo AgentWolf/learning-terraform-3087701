@@ -62,5 +62,5 @@ resource "aws_security_group" "blog" {
   name        = "blog"
   description = "Allow 80 and 443 in, everything out"
 
-  vpc_id = data.aws_vpc.default.id
+  vpc_id = module.blog_vpc.vpc_id
 }
